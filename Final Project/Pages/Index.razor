@@ -1,0 +1,472 @@
+﻿@using System;
+@using System.Net.Http.Headers;
+@using System.Text.Json;
+@using System.Text.Json.Nodes;
+@using System.Text.Json.Serialization;
+@using System.Xml.Linq;
+@using Final_Project.Data
+@using System.Net
+@page "/"
+
+<PageTitle>Index</PageTitle>
+<button style="@btn1" @onclick="test">Click to start the game</button>
+<button style="@btn2 width: 50%;" @onclick="StartBattle">@battle</button>
+
+<div >
+    <div style="@Container" @bind="@content">
+        <p>@str</p>
+        <p>@str1</p>
+        <p>To select a Pokémon, press the button under the their name.</p>
+        @for (int i = 0; i < pokemons.Count; i++)
+        {
+            Pokemon p = pokemons[i]; 
+            if (p.types[0]==("Fire"))
+            {
+                <p style="margin-bottom:0;background-color: red">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Grass"))
+            {
+                <p style="margin-bottom:0;background-color: green">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Water"))
+            {
+                <p style="margin-bottom:0;background-color: blue; color: white">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Psychic"))
+            {
+                <p style="margin-bottom:0;background-color: purple; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Ice"))
+            {
+                <p style="margin-bottom:0;background-color: lightblue; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Rock"))
+            {
+                <p style="margin-bottom:0;background-color:saddlebrown; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Fighting"))
+            {
+                <p style="margin-bottom:0;background-color: darkred; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Electric"))
+            {
+                <p style="margin-bottom:0;background-color:yellow; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Bug"))
+            {
+                <p style="margin-bottom:0;background-color:darkolivegreen; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Normal"))
+            {
+                <p style="margin-bottom:0;background-color:white; color: black; border:dashed black 3px">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Flying"))
+            {
+                <p style="margin-bottom:0;background-color:wheat; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Ground"))
+            {
+                <p style="margin-bottom:0;background-color:brown; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Fairy"))
+            {
+                <p style="margin-bottom:0;background-color:hotpink; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Psychic"))
+            {
+                <p style="margin-bottom:0;background-color:deeppink; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Steel"))
+            {
+                <p style="margin-bottom:0;background-color:slategrey; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Poison"))
+            {
+                <p style="margin-bottom:0;background-color:greenyellow; color: black">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Dark"))
+            {
+                <p style="margin-bottom:0;background-color:black; color: red">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Ghost"))
+            {
+                <p style="margin-bottom:0;background-color:gainsboro; color: red">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            }
+            else if (p.types[0]==("Dragon"))
+            {
+                <p style="margin-bottom:0;background-color:gold; color: red">@p.ToString()</p>
+                <button @onclick="@(() => GetPokémon(p.name))">Select @p.name</button>
+            } 
+            <br />
+            <br />
+        }
+    </div>
+    <div><label>@BattleInfo</label></div>
+    <div style="@CPUPokemon"> 
+        <div class="image-container">
+            <img src="@CPUImageUrl" class="silhouette-image" />
+        </div>
+        <label>@CPUName</label>
+        <br /> 
+        <div style="border: solid black 4px; ">
+            <div style="@CPUHPStyle">
+                <label>HP:</label><div style="@CPUHealthBar"> </div> 
+            </div> 
+        </div>
+    </div>
+    <div style="@MoveList"> 
+        <div class="image-container">
+            <img src="@PlayerImageUrl" class="silhouette-image" />
+        </div>
+        <label>@Name</label>
+        <br />
+        <label>Moves:</label>
+        <div style="border: solid black 4px; ">
+            <div style="@HPStyle"> 
+                    <label>HP:</label>
+                    <div style="@HealthBar"> </div> 
+            </div> 
+                <label>@HPNUM</label>
+            <div>
+                <button @onmouseover="@(()=> DisplayMoveInfo(@Move1))" @onclick="@(()=>UpdateCPUHealth())">@Move1</button>
+                <button @onmouseover="@(()=> DisplayMoveInfo(@Move2))" @onclick="@(()=>UpdateCPUHealth1())">@Move2</button>
+                <br />
+                <textarea>
+                    @TextAreaEffect
+            </textarea>
+            </div>
+        </div>
+    </div> 
+</div>
+@code
+{
+    List<Pokemon> pokemons= new List<Pokemon>();
+    Pokemon P1;
+    private string CPUImageUrl;
+    private string PlayerImageUrl;
+    private string battle;
+    private string CPUPokemon;
+    private string CPUHPStyle;
+    private int HPMax;
+    private string HPNUM;
+    private int HPAmount;
+    private int CPUHPAmount;
+    private string HealthBar;
+    private string CPUHealthBar;
+    private string MoveInfo1;
+    private string MoveInfo2;
+    private string Move1;
+    private string Move2;
+    private string Move3;
+    private string Move4;
+    private string content;
+    private string str;
+    private string str1;
+    private string text=""; 
+    private string Container;
+    private string btn1;
+    private string btn2;
+    private string MoveList;
+    private string Name;
+    private string CPUName;
+    private string TextAreaEffect;
+    private string HPStyle;
+    private string BattleInfo;
+    private int turn;
+    private Pokemon CPU;
+    private bool ContinueBattle = true;
+
+    public async void GetPokemon(int id)
+    {
+        HttpClient httpClient = new HttpClient();
+        var apiResponse = await httpClient.GetFromJsonAsync<JsonElement>($"https://pokeapi.co/api/v2/pokemon-species/{id}");
+
+        PlayerImageUrl = $"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{id}.png";
+    }
+    public async void GetCPUPokemon(int id)
+    {
+        HttpClient httpClient = new HttpClient();
+        var apiResponse = await httpClient.GetFromJsonAsync<JsonElement>($"https://pokeapi.co/api/v2/pokemon-species/{id}");
+
+        CPUImageUrl = $"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{id}.png";
+    }
+    public void DisplayMoveInfo(string move)
+    {
+        foreach (Pokemon p in pokemons)
+        {
+            Moves[] moves = p.moves;
+            for (int i = 0; i < moves.Length; i++)
+            {
+                Moves movesArr = moves[i];
+                if (movesArr.name == move)
+                {
+                    TextAreaEffect = movesArr.GetData();
+                }
+            }
+        }
+    }
+
+    public void GetPokémon(string data)
+    {
+        Pokemon pokemon = new Pokemon();
+        foreach (Pokemon p in pokemons)
+        {
+            if (p.name == data)
+            { 
+                str = "Your Pokémon: " + p.ToString();
+                P1 = p;
+            }
+        }
+        Container = "display:none";
+
+        GetPokemon(P1.id);
+        GetCPUPokémon();
+        GetCPUPokemon(CPU.id);
+        btn1 = "display:none;";
+        btn2 = "display:block;";
+    }
+
+    public void GetTurn()
+    {
+        GameOver();
+        if (turn == -1)
+        {
+            return;    
+        }
+        if (turn == 1)
+        {
+            BattleInfo = "It's Red's turn. What will Red do?";
+
+            UpdatePlayerHealth(CPU);
+        }
+        else if (turn == 2)
+        {
+            BattleInfo = "It's your turn! What will you do?";
+        }
+        BattleInfo += " ";
+    }
+
+    public async Task test()
+    {  
+        HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Get, "http://127.0.0.1:8000/");
+        message.Headers.Host = "127.0.0.1:8000";
+        HttpClient client = new HttpClient(); 
+        HttpResponseMessage response = await client.SendAsync(message);
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadAsStringAsync();
+        JsonNode data = JsonObject.Parse(body);
+        GetData(data);
+        Random rnd = new Random();
+        turn =  rnd.Next(1, 3);
+    } 
+
+    void GetData(JsonNode data)
+    {
+        Pokemon pokemon = new Pokemon();
+        pokemons = JsonSerializer.Deserialize<List<Pokemon>>(data);
+        int count = 1;
+        foreach (Pokemon p in pokemons)
+        {
+            p.id = count;
+            text += (p.ToString());
+            count++;
+        }
+    }
+
+    public void GameOver()
+    {
+        if (CPUHPAmount <= 0)
+        {
+            BattleInfo = "You won!";
+            CPUImageUrl = ""; 
+            turn = -1;
+        }
+        else if(HPAmount <=0)
+        {
+            BattleInfo = "Red won."; 
+            PlayerImageUrl="";
+            turn = -1;
+        }
+    }
+
+    void GetCPUPokémon()
+    {
+        Random rnd = new Random();
+        int value = rnd.Next(0, pokemons.Count);
+        CPU = pokemons[value];
+        str1 += "CPU's Pokémon: " + CPU.ToString();
+        CPUName = CPU.name;
+        CPUHealthBar = "display:block; background-color:green; color:green;width:87%;";
+        CPUHPStyle = "display:flex;";
+    }
+
+
+    void StartBattle()
+    {
+        if (battle == "Battle!")
+        {
+            str1 = "";
+            str = "";
+            MoveList = "display: inline-block;position:absolute;right:20px;";
+            Move1 = P1.moves[0].name;
+            Move2 = P1.moves[1].name;
+            Name = P1.name;
+            HPAmount = 100;
+            CPUHPAmount = 100;
+            HealthBar = "display:block; background-color:green; color:green;width:100%;";//87
+            HPMax = 100;
+            HPNUM = (HPAmount + "/" + HPMax);
+            CPUPokemon = "display:block;width:16%;height:155px;";
+            HPStyle = "display:flex;";
+            GetTurn();
+            battle = "restart";
+        }
+        else if (battle == "restart")
+        {
+            Random r = new Random();
+            turn = r.Next(1,3);
+            BattleInfo = "";
+            btn2 = "display:none;";
+            MoveList = "display:none;";
+            HealthBar = "display:none;";
+            CPUPokemon = "display:none;";
+            battle = "Battle!";
+
+            Container = "display:block"; 
+            btn1 = "display:block;"; 
+        }
+    }
+
+    public void DisplayStatusAffect()
+    {
+        if (turn != -1)
+        {
+            BattleInfo = P1.name + " Used " + P1.moves[1].name;
+            turn = 1;
+            UpdatePlayerHealth(CPU);
+        }
+    }
+    public void UpdateCPUHealth1()
+    {
+        if (turn != 2 || HPAmount <= 0)
+        {
+            return;
+        }
+        if (P1.moves[1].type == "Attack")
+        {
+            CPUHPAmount -= P1.moves[1].power;
+            if (CPUHPAmount > 50)
+            {
+                CPUHealthBar = "display:block; background-color:green; color:green;width:" + CPUHPAmount + "%;";
+            }
+            else if (CPUHPAmount > 30 && CPUHPAmount < 50)
+            {
+                CPUHealthBar = "display:block; background-color:yellow; color:yellow;width:" + CPUHPAmount + "%;";
+            }
+            else if (CPUHPAmount < 30)
+            {
+                CPUHealthBar = "display:block; background-color:red; color:red;width:" + CPUHPAmount + "%;";
+            }
+            else
+            {
+                CPUHealthBar = "display:block; background-color:red; color:red;width:" + 0 + "%;";
+            }
+            turn = 1;
+            GetTurn();
+        }
+        else
+        {
+            DisplayStatusAffect();
+        }
+    }
+    public void UpdateCPUHealth()
+    {
+        if (turn != 2 || HPAmount <= 0)
+        { 
+            return;
+        } 
+        CPUHPAmount -= P1.moves[0].power;
+        if (CPUHPAmount > 50)
+        {
+            CPUHealthBar = "display:block; background-color:green; color:green;width:" + CPUHPAmount + "%;";
+        }
+        else if (CPUHPAmount > 30 && CPUHPAmount < 50)
+        {
+            CPUHealthBar = "display:block; background-color:yellow; color:yellow;width:" + CPUHPAmount + "%;";
+        }
+        else if (CPUHPAmount < 30)
+        {
+            CPUHealthBar = "display:block; background-color:red; color:red;width:" + CPUHPAmount + "%;";
+        }
+        else
+        {
+            CPUHealthBar = "display:block; background-color:red; color:red;width:" + 0 + "%;";
+        }
+        turn = 1;
+        GetTurn();
+    }
+
+    public  void UpdatePlayerHealth(Pokemon pokemon)
+    {
+        if (turn != 1 || CPUHPAmount <= 0)
+        {
+            return;
+        }  
+        BattleInfo = "Red's " + pokemon.name + " used " + pokemon.moves[0].name;
+        HPAmount -= pokemon.moves[0].power;
+        if (HPAmount < 0)
+        {
+            HPAmount = 0;    
+        }
+        if (HPAmount > 50)
+        {
+            HealthBar = "display:block; background-color:green; color:green;width:" + HPAmount + "%;";
+        }
+        else if (HPAmount > 30 && HPAmount < 50)
+        {
+            HealthBar = "display:block; background-color:yellow; color:yellow;width:" + HPAmount + "%;";
+        }
+        else if (HPAmount < 30)
+        {
+            HealthBar = "display:block; background-color:red; color:red;width:" + HPAmount + "%;";
+        }
+        else
+        {
+            HealthBar = "display:block; background-color:red; color:red;width:" + HPAmount + "%;";
+        } 
+        HPNUM = (HPAmount + "/" + HPMax);
+        turn = 2;
+        if (HPAmount <= 0)
+        {
+
+            BattleInfo = "Red Won.";
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        btn2 = "display:none;";
+        MoveList = "display:none;";
+        HealthBar = "display:none;";
+        CPUPokemon = "display:none;";
+        battle = "Battle!";
+    }
+}
